@@ -32,7 +32,7 @@
         <div class="list-group list-group-flush">
           <form class="form-inline">
             
-            <input class="form-control form-control-sm ml-3 w-75" type="text" placeholder="Search for a city:"
+            <input class="form-control form-control-sm ml-3 w-75" id="searchBox" type="text" placeholder="Search for a city:"
               aria-label="Search">
               
               <button class="col-md-1 btn searchButton">
@@ -40,6 +40,7 @@
               
           </form>
           <hr>
+          <!-- side bar cities/links
           <a href="#" class="list-group-item list-group-item-action bg-light"
             >Austin</a
           >
@@ -63,13 +64,15 @@
           >
           <a href="#" class="list-group-item list-group-item-action bg-light"
             >Atlanta</a
-          >
+          > -->
         </div>
       </div>
       <!-- /#sidebar-wrapper -->
 
       <!-- Page Content -->
       <div id="page-content-wrapper">
+        
+        <!-- nav bar -->
         <nav
           class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
         >
@@ -96,6 +99,16 @@
               
           </div>
         </nav>
+        <!-- end of nav -->
+<div class="card" style="width: 100%;">
+  <!-- add in weather API info -->
+  <!-- <img src="..." class="card-img-top" alt="..."> -->
+  <!-- <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+    
+  </div>
+</div>
 
         <div class="container-fluid"></div>
       </div>
@@ -103,16 +116,13 @@
     </div>
     <!-- /#wrapper -->
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Menu Toggle Script -->
-    <script>
-      $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-      });
-    </script>
+    
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+<script src="script.js"></script>
+   
   </body>
 </html>
