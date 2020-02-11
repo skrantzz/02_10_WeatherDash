@@ -30,56 +30,120 @@
 function searchCity(searchInput) {
   // Constructing a queryURL using the name
   var apiKey = "&appid=4204ebef4f6e7d80cdfbbe2d12a641ee";
-  var queryURL =
+
+  var firstUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=" + searchInput + apiKey;
 
-  // UV index
+  var result;
 
   // Performing an AJAX request with the queryURL
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  })
-    // After data comes back from the request, renders data to page
-    .then(function(response) {
-      console.log(response);
+  $.ajax({ url: firstUrl, method: "GET" })
+    .then(response => {
+      result = response;
+      var lat = response.coord.lat;
+      var long = response.coord.lon;
 
-      //   get uv index - come back to this ************
-      //   $.ajax({
-      //     url: uvIndex,
-      //     method: "GET"
-      //   });
-
-      //   var uvIndex =
+      //   var secondUrl =
       //     "https://api.openweathermap.org/data/2.5/uvi?" +
       //     apiKey +
       //     "&lat=" +
-      //     response.coord.lat +
+      //     lat +
       //     "&lon=" +
-      //     response.coord.lon;
+      //     long;
 
-      $("<div id=weatherDiv></div>").appendTo(".card");
-      var city = response.name;
-      var tempK = response.main.temp;
-      var humidity = response.main.humidity;
-      var wind = response.wind.speed;
+      //   return $.ajax({ url: secondUrl, method: "GET" });
+      // })
+      // .then(response => {
+      //   var uvi = response.value;
+      // result.uvi = uvi;
+      if ($("#weatherDiv").length) {
+        var weatherDiv = $("#weatherDiv");
+      } else {
+        var weatherDiv = $("<div id='weatherDiv'></div>").appendTo(".card");
+      }
+
+      var city = result.name;
+      var tempK = result.main.temp;
+      var humidity = result.main.humidity;
+      var wind = result.wind.speed;
+      var icon = result.weather[0].icon;
+
+      var iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+      var iconElement = $("<img>");
+      iconElement.attr("src", iconUrl);
 
       //   convert kelvin to f
       var num = (tempK * 9) / 5 - 459.67;
       var tempF = num.toFixed(1);
 
-      $("#weatherDiv").empty();
-      $("#weatherDiv").append(
+      weatherDiv.empty();
+      weatherDiv.append(iconElement);
+      weatherDiv.append(
         "<h1>" + city,
         "<p>" + "Temperature: " + tempF + " ºF",
         "<p>" + "Humidity: " + humidity + "%",
         "<p>" + "Wind Speed: " + wind + " MPH"
-        // "<p>" + uvIndex
+        // "<p>" + "UV Index: " + uvi
       );
-      $("<div class=card id=5dayCard></div>").appendTo("#weatherDiv");
-      $("#5dayCard").append("</h1>" + "5-Day Forecast: ");
+
+      var fiveDayWeather =
+        "https://api.openweathermap.org/data/2.5/forecast?q=" +
+        searchInput +
+        apiKey;
+
+      return $.ajax({
+        url: fiveDayWeather,
+        method: "GET"
+      });
+    })
+    .then(function(response) {
+      var list = response.list;
+      var nextDayArray = [0, 8, 16, 24, 32];
+
+      if ($("#forecastsDiv").length) {
+        var forecastsDiv = $("#forecastsDiv");
+      } else {
+        var forecastsDiv = $("<div id='forecastsDiv'></div>").appendTo(
+          "#weatherDiv"
+        );
+      }
+      $("#forecastsDiv").append("<h1>" + "5 Day Weather Forecast: ");
+      for (var i = 0; i < nextDayArray.length; i++) {
+        var forecast = list[nextDayArray[i]];
+        var tempK = forecast.main.temp;
+        //   convert kelvin to f
+        var num = (tempK * 9) / 5 - 459.67;
+        var tempF = num.toFixed(1);
+        var humidity = forecast.main.humidity;
+        console.log(forecast);
+        var icon = forecast.weather[0].icon;
+
+        var iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+        var iconElement = $("<img>");
+        iconElement.attr("src", iconUrl);
+
+        // weatherDiv.empty();
+
+        // weatherDiv.append(
+        //   "<p>" + "Wind Speed: " + wind + " MPH",
+        //   "<p>" + "Temperature: " + tempF + " ºF",
+        //   "<p>" + "UV Index: " + uvi
+        // );
+
+        // var temp = forecast.temp;
+        console.log(i + 1, `<div id='forecast-${i + 1}' class='card'></div>`);
+        $(
+          `<div id='forecast-${i + 1}' class='card forecast-card'></div>`
+        ).appendTo("#forecastsDiv");
+        $(`#forecast-${i + 1}`).append(
+          iconElement,
+          "<p>" + "Temperature: " + tempF + "ºF",
+          "<p>" + "Humidity: " + humidity + "%"
+        );
+      }
     });
 }
+
 $(".searchButton").on("click", function() {
   event.preventDefault();
   var searchInput = $("#searchBox")
