@@ -63,6 +63,8 @@ function searchCity(searchInput) {
       }
 
       var city = result.name;
+      var currentDate = moment.unix(result.dt);
+      currentDate = currentDate.format("MM/DD/YY");
       var tempK = result.main.temp;
       var humidity = result.main.humidity;
       var wind = result.wind.speed;
@@ -79,10 +81,11 @@ function searchCity(searchInput) {
       weatherDiv.empty();
       weatherDiv.append(iconElement);
       weatherDiv.append(
-        "<h1>" + city,
+        "<h1>" + city + " (" + currentDate + ")",
         "<p>" + "Temperature: " + tempF + " ºF",
         "<p>" + "Humidity: " + humidity + "%",
         "<p>" + "Wind Speed: " + wind + " MPH"
+
         // "<p>" + "UV Index: " + uvi
       );
 
@@ -115,8 +118,9 @@ function searchCity(searchInput) {
         var num = (tempK * 9) / 5 - 459.67;
         var tempF = num.toFixed(1);
         var humidity = forecast.main.humidity;
-        console.log(forecast);
         var icon = forecast.weather[0].icon;
+        var forecastDate = moment.unix(forecast.dt);
+        forecastDate = forecastDate.format("MM/DD/YY");
 
         var iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
         var iconElement = $("<img>");
@@ -137,6 +141,7 @@ function searchCity(searchInput) {
         ).appendTo("#forecastsDiv");
         $(`#forecast-${i + 1}`).append(
           iconElement,
+          "<p>" + "Date: " + forecastDate + "</p>",
           "<p>" + "Temperature: " + tempF + "ºF",
           "<p>" + "Humidity: " + humidity + "%"
         );
