@@ -135,7 +135,7 @@ function searchCity(searchInput) {
         // );
 
         // var temp = forecast.temp;
-        console.log(i + 1, `<div id='forecast-${i + 1}' class='card'></div>`);
+        // console.log(i + 1, `<div id='forecast-${i + 1}' class='card'></div>`);
         $(
           `<div id='forecast-${i + 1}' class='card forecast-card'></div>`
         ).appendTo("#forecastsDiv");
@@ -155,9 +155,35 @@ $(".searchButton").on("click", function() {
     .val()
     .trim();
   searchCity(searchInput);
+  localStorage.setItem("city", searchInput);
+
+  // create dynamic html here
+  cityList = ["Dallas", "Austin", "Houston"];
+  cityList.push(searchInput);
+
+  cityList.forEach(city => {
+    var div = $("<a>");
+    div.addClass("cities");
+    // ul > li
+    div.attr("data-city", city);
+    div.text(city);
+    $(".list-group").append(div);
+  });
 });
+
 // toggle button
 $("#menu-toggle").click(function(e) {
   e.preventDefault();
   $("#wrapper").toggleClass("toggled");
 });
+
+$(".list-group").on("click", ".cities", function() {
+  console.log("clicked");
+  var city = $(this).attr("data-city");
+
+  console.log(city);
+  // make another ajax call with that city
+});
+
+// global list , push cities to that list
+// ['Dallas', 'Austin', 'Houston']
